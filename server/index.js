@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const AuthRouter = require("./App/routes/authroutes");
 const path = require("path");
 const MsgRouter = require("./App/routes/messageroutes");
-const UserModel = require("./App/models/authmodel");
 const {io,app,server}=require("./App/controllers/socket")
 app.use(cookieParser());
 // const __dirname = path.resolve();
@@ -22,10 +21,6 @@ app.get("*", (req, res) => {
 })
 app.use("/api/auth", AuthRouter);
 app.use("/api/msg", MsgRouter);
-app.get("/seee", async(req, res) => {
-  let users= await UserModel.find();
-  res.status(200).json(users)
-})
 server.listen(process.env.PORT);
 
 mongoose.connect(process.env.MONGO_URL).then(() => {

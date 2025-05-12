@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
 };
 const Getmessage = async (req, res) => {
  try {
-    const { id: RecieverId } = req.params;
+    const { userId: RecieverId } = req.params;
     const MyId = req.user._id;
     const messages = await Message.find({
       $or: [
@@ -28,7 +28,7 @@ const Getmessage = async (req, res) => {
 };
 const Sendmessage = async (req, res) => {
   try {
-    const { id: recieverId } = req.params;
+    const {userId: recieverId } = req.params;
     const { text, image } = req.body;
 
     let Imageurl;
