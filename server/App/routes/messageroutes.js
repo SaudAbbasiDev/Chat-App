@@ -4,8 +4,8 @@ const MsgRouter=express.Router()
 const {getAllUsers,Getmessage, Sendmessage}=require("../controllers/messagecontroller")
 
 MsgRouter.get("/getuser",getAllUsers)
-MsgRouter.get("/:userId", Protect, Getmessage)
-MsgRouter.post("/send/:userId", Protect, Sendmessage)
+MsgRouter.get("/:id", Protect, Getmessage)
+MsgRouter.post("/send/:id", Protect, Sendmessage)
 
 
 module.exports=MsgRouter
