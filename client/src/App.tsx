@@ -7,19 +7,19 @@ import axios from "axios";
 import Navbar from "./components/navbar";
 import { useAuthStore } from "./components/authstore";
 import { useEffect } from "react";
-import {  ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   // // Global axios settings
-  const { authUser, CheckAuth, isCheckingAuth,Onlineusers } = useAuthStore();
+  const { authUser, CheckAuth, isCheckingAuth, Onlineusers } = useAuthStore();
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = `${process.env.LOCAL_URL}/api`
+  axios.defaults.baseURL = "http://localhost:4000/api";
 
   // Get authUser status from context
-console.log({Onlineusers})
+  console.log({ Onlineusers });
   useEffect(() => {
     CheckAuth(); // checks token only once at load
-  }, []);
+  }, [CheckAuth]);
   // toast.success("Hi")
 
   if (isCheckingAuth) return <div>Loading...</div>; // Wait here ⏳ just once
@@ -35,15 +35,11 @@ console.log({Onlineusers})
         />
         <Route
           path="/login"
-          element={
-            authUser ? <Navigate to="/" /> :
-             <Login />}
+          element={!authUser? <Login />:<Navigate to="/"/>}
         />
         <Route
           path="/signup"
-          element={
-            authUser ?<Navigate to="/" /> : 
-             <SignUp />}
+          element={<SignUp />}
         />
         <Route
           path="/profile"

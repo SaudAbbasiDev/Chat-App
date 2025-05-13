@@ -1,19 +1,18 @@
-const UserModel = require("../models/authmodel");
-const Message = require("../models/messagemodel");
-const cloudinary = require("./cloudnary");
-const { getReceiverId } = require("./socket");
-const { io } = require("./socket");
+import UserModel from "../models/authmodel.js";
+import Message from "../models/messagemodel.js";
+import cloudinary from "./cloudnary.js";
+import { getReceiverId,io } from "./socket.js";
+
 const getAllUsers = async (req, res) => {
-  
-    // const Loggeduser = req.user._id;
-    // const allusers = await UserModel.find({
-     let users = await UserModel.find({});
-    
-    res.status(200).json(users);
+  // const Loggeduser = req.user._id;
+  // const allusers = await UserModel.find({
+  let users = await UserModel.find({});
+
+  res.status(200).json(users);
 };
 const Getmessage = async (req, res) => {
- try {
-    const { userId: RecieverId } = req.params;
+  try {
+    const { id: RecieverId } = req.params;
     const MyId = req.user._id;
     const messages = await Message.find({
       $or: [
@@ -21,15 +20,16 @@ const Getmessage = async (req, res) => {
         { senderId: RecieverId, recieverId: MyId },
       ],
     });
-    res.send(messages).json(messages)
- } catch (error) {
-    res.send(error)
- }
+    res.status(200).json(messages);
+  } catch (error) {
+    res.send(error);
+  }
 };
 const Sendmessage = async (req, res) => {
   try {
-    const {userId: recieverId } = req.params;
+    const { id: recieverId } = req.params;
     const { text, image } = req.body;
+    const senderId = req.user._id;
 
     let Imageurl;
     if (image) {
@@ -37,22 +37,22 @@ const Sendmessage = async (req, res) => {
       Imageurl = responseImage.secure_url;
     }
 
-    const newMessage = await new Message({
-      senderId: req.user._id,
+    const newMessage = new Message({
+      senderId,
       recieverId,
       text,
       image: Imageurl,
     });
 
-    await newMessage.save();  // ✅ Await this to catch save errors
+    await newMessage.save(); // ✅ Await this to catch save errors
 
-    const senderSocketid = getReceiverId(req.user._id);
+    // const senderSocketid = getReceiverId(req.user._id);
     const recieverSocketid = getReceiverId(recieverId);
 
-    if (senderSocketid) {
-      io.to(senderSocketid).emit("newMessage", newMessage);
-    }
-    if (recieverSocketid && recieverSocketid !== senderSocketid) {
+    // if (senderSocketid) {
+    //   io.to(senderSocketid).emit("newMessage", newMessage);
+    // }
+    if (recieverSocketid) {
       io.to(recieverSocketid).emit("newMessage", newMessage);
     }
     // ✅ Only send one response
@@ -60,8 +60,10 @@ const Sendmessage = async (req, res) => {
   } catch (error) {
     console.error("Sendmessage error:", error);
     // ✅ Use status and return to prevent multiple sends
-    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
-module.exports = { getAllUsers, Getmessage,Sendmessage };
+export { getAllUsers, Getmessage, Sendmessage };

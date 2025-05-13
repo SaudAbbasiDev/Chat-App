@@ -6,7 +6,7 @@ const Navbar = () => {
 
   return (
     <>
-      <main className="flex justify-between px-8 pt-5 bg-indigo-50">
+      <main className="flex justify-between px-8 pt-5 bg-indigo-50 h-16">
         <div className="flex gap-3 items-center select-none">
           <div className="flex items-center justify-center gap-8">
             <a
@@ -21,7 +21,7 @@ const Navbar = () => {
 
         <div className="pb-3">
           {authUser && (
-            <div className="flex md:gap-10 gap-3 max-md:flex-col ">
+            <div className="flex md:gap-10 gap-3  ">
               <a
                 href="/profile"
                 className="flex justify-center gap-2 py-1 scale-90 bg-gray-200 px-2  rounded-md"

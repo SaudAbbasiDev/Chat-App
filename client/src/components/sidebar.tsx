@@ -61,11 +61,11 @@ const Sidebar = () => {
 
 
       {/* mobile sidebar */}
-      <div className="drawer max-md:block hidden mt-10 ml-3">
+      <div className="drawer max-md:block hidden mt-6 ml-2 mr-2 w-0">
   <input id="my-drawer" type="checkbox" className="drawer-toggle " />
   <div className="drawer-content ">
 
-    <label htmlFor="my-drawer" className="btn btn-primary drawer-button bg-white  border-none shadow-none"><PanelRightClose size={40} color="indigo" /></label>
+    <label htmlFor="my-drawer" className="btn btn-primary drawer-button bg-white  border-none shadow-none"><PanelRightClose size={40} color="indigo" className="" /></label>
   </div>
   <div className="drawer-side">
     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>

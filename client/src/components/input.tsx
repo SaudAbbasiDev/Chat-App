@@ -5,20 +5,20 @@ import { toast } from "react-toastify";
 
 const Input = () => {
   const [Text, setText] = useState("");
-  const [imagePre, setImagepre] = useState<any>(null);
-  const fileInput = useRef(null);
+  const [imagePre, setImagepre] = useState<string | null>(null);
+  const fileInput = useRef<HTMLInputElement | null>(null);
   const { sendMessage } = useMsgStore();
   console.log(Text);
-  const handleImagechange = async (e: any) => {
-    let file = e.target.files[0];
+  const handleImagechange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setImagepre(reader.result);
+      setImagepre(reader.result as string);
     };
   };
-  const sendMsg = async (e: any) => {
+  const sendMsg = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await sendMessage({ text: Text.trim(), image: imagePre });

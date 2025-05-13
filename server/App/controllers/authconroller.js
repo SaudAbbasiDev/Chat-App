@@ -1,7 +1,7 @@
-const UserModel = require("../models/authmodel.js");
-const bcrypt = require("bcrypt");
-const cloudinary = require("./cloudnary.js");
-const jwt = require("jsonwebtoken");
+import UserModel from "../models/authmodel.js";
+import bcrypt from "bcrypt";
+import cloudinary from "./cloudnary.js";
+import jwt from "jsonwebtoken";
 
 const signup = async (req, res) => {
   const { fullname, username, password, profilePic } = req.body;
@@ -129,4 +129,4 @@ const check = (req, res) => {
   }
 };
 
-module.exports = { signup, login, logout, updateProfile, check };
+export { signup, login, logout, updateProfile, check };

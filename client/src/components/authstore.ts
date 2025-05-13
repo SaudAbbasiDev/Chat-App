@@ -12,42 +12,46 @@ export const useAuthStore: any = create<any>((set: any, get: any) => ({
   socket: null,
   CheckAuth: async () => {
     try {
-      await axios.get("/auth/check").then((res) => {
-        set({ authUser: res.data.info });
-        get().connectSocket();
-      });
+      const res = await axios.get("/auth/check");
+      set({ authUser: res.data.info });
+      get().connectSocket();
     } catch (error) {
       console.log(error);
     } finally {
       set({ isCheckingAuth: false });
-
     }
   },
   connectSocket: async () => {
     const { authUser } = get();
-    const socket = io("http://localhost:4000",{
-      query:{userId:authUser._id}
+    if (!authUser || get().socket?.connected) return;
 
+    console.log("Connecting to socket...");
+    const socket = io("http://localhost:4000", {
+      query: { userId: authUser._id },
     });
-    if (!authUser || get.socket?.connected) return;
 
-    
-    
     socket.connect();
-    
-    socket.on("getOnlineusers",(userIds)=>{
-set({ Onlineusers:userIds })
 
-    })
+    socket.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    socket.on("getOnlineusers", (userIds) => {
+      console.log("Received online users", userIds);
+      set({ Onlineusers: userIds });
+    });
     set({ socket: socket });
-
   },
   disconnectSocket: async () => {
     if (get().socket?.connected) get().socket.disconnect();
   },
   Signup: async (data: any) => {
     try {
-      let res = await axios.post("/auth/signup", data);
+      const res = await axios.post("/auth/signup", data);
       set({ authUser: res.data });
       console.log(res.data);
       toast.success("Signup Successfully");
@@ -62,7 +66,7 @@ set({ Onlineusers:userIds })
   },
   Login: async (data: any) => {
     try {
-      let res = await axios.post("/auth/login", data);
+      const res = await axios.post("/auth/login", data);
       set({ authUser: res.data });
       // console.log({heheeh:res.data});
       toast.success("Login Successfully");

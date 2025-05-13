@@ -1,11 +1,10 @@
-const Protect=require("../middleware/authmiddleware")
-const express=require("express")
+import Protect from "../middleware/authmiddleware.js"
+import express from "express"
 const MsgRouter=express.Router()
-const {getAllUsers,Getmessage, Sendmessage}=require("../controllers/messagecontroller")
+import { getAllUsers, Getmessage, Sendmessage } from "../controllers/messagecontroller.js"
 
-MsgRouter.get("/getuser",getAllUsers)
+MsgRouter.get("/getuser", getAllUsers)
 MsgRouter.get("/:id", Protect, Getmessage)
 MsgRouter.post("/send/:id", Protect, Sendmessage)
 
-
-module.exports=MsgRouter
+export default MsgRouter;

@@ -1,6 +1,6 @@
 import { ArrowLeft, MoreVertical, Search } from "lucide-react";
 import { useMsgStore } from "./msgstore";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Input from "./input";
 import { useAuthStore } from "./authstore";
 
@@ -13,28 +13,27 @@ const ChatArea = () => {
     listenMessage,
     unlistenMessage,
   } = useMsgStore();
-  let messageRef = useRef<any>(null);
+  // let messageRef = useRef<any>(null);
   const { authUser, Onlineusers } = useAuthStore();
   useEffect(() => {
-    getMessages(selectedUser?._id);
+    getMessages(selectedUser._id);
     listenMessage();
-    messageRef.current.scrollIntoView({ behavior: "smooth" });
+    // messageRef.current.scrollIntoView({ behavior: "smooth" });
     return () => unlistenMessage();
-  }, [selectedUser, getMessages, listenMessage, unlistenMessage]);
+  }, [selectedUser._id, getMessages, listenMessage, unlistenMessage]);
+
   console.log({ heeeeeeeh: messages });
   if (isMessageloading) return <h1>Loading...</h1>;
   return (
     <div className="flex-1 flex flex-col max-md:w-screen max-h-[93%] overflow-y-hidden bg-white">
       {/* Chat Header */}
       <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <button className="md:hidden">
-            <ArrowLeft size={20} />
-          </button>
-          <div className="relative">
+        <div className="flex items-center ml-12 space-x-4">
+         
+          <div className="relative flex items-center justify-center">
             <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-white font-semibold">
               <img
-                src={selectedUser?.profilePic || "/avatar.png"}
+                src={selectedUser.profilePic || "/avatar.png"}
                 alt=""
                 className="rounded-full object-contain"
               />
@@ -54,14 +53,7 @@ const ChatArea = () => {
             </p>
           </div>
         </div>
-        <div className="flex space-x-4 text-gray-500">
-          <button className="hover:text-gray-700">
-            <Search size={20} />
-          </button>
-          <button className="hover:text-gray-700">
-            <MoreVertical size={20} />
-          </button>
-        </div>
+       
       </div>
 
       {/* Messages */}
@@ -73,8 +65,7 @@ const ChatArea = () => {
           </div>
 
           {/* message AREA */}
-          {messages?.map((message: any) => {
-      
+          {messages.map((message: any,index:number) => {
             const dateObj = new Date(message?.createdAt || Date.now());
             const formattedTime = dateObj.toLocaleTimeString("en-US", {
               hour: "numeric",
@@ -84,11 +75,12 @@ const ChatArea = () => {
 
             return (
               <div
-                key={message?._id}
-                className={`flex ${
-                  message?.senderId === authUser?._id ? "justify-end" : "justify-start"
+                key={index}
+                className={`chat ${
+                  message?.senderId === authUser._id
+                    ? "chat-end"
+                    : "chat-start"
                 } mb-3`}
-                ref={messageRef}
               >
                 <div>
                   <div
@@ -110,15 +102,17 @@ const ChatArea = () => {
                     )}
 
                     {/* Text */}
-                    {message?.text && (
-                      <p className="whitespace-pre-wrap">{message?.text}</p>
+                    {message.text && (
+                      <p className="whitespace-pre-wrap">{message.text}</p>
                     )}
                   </div>
 
                   {/* Time (under bubble) */}
                   <p
                     className={`text-[10px] mt-1 text-gray-500 ${
-                      message?.senderId === authUser?._id ? "text-right" : "text-left"
+                      message?.senderId === authUser._id
+                        ? "text-right"
+                        : "text-left"
                     }`}
                   >
                     {formattedTime}
