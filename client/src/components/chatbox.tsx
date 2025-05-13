@@ -1,4 +1,3 @@
-import { ArrowLeft, MoreVertical, Search } from "lucide-react";
 import { useMsgStore } from "./msgstore";
 import { useEffect } from "react";
 import Input from "./input";

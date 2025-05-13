@@ -11,7 +11,7 @@ import { io, app, server } from "./App/controllers/socket.js";
 app.use(cookieParser());
 const __dirname = path.resolve();
 app.use(express.json()); // Increase limit
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin:process.env.DEV_URL }));
 app.get("/", (req, res) => {
   res.send("Working Fine");
 });

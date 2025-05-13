@@ -13,10 +13,12 @@ const App = () => {
   // // Global axios settings
   const { authUser, CheckAuth, isCheckingAuth, Onlineusers } = useAuthStore();
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = "http://localhost:4000/api";
-
-  // Get authUser status from context
-  console.log({ Onlineusers });
+  (axios.defaults.baseURL =
+    import.meta.env.VITE_MODE === "development"
+      ? "http://localhost:4000/api"
+      : `${import.meta.env.VITE_DEV_URL}/api`),
+    // Get authUser status from context
+    console.log({ Onlineusers });
   useEffect(() => {
     CheckAuth(); // checks token only once at load
   }, [CheckAuth]);
@@ -35,12 +37,9 @@ const App = () => {
         />
         <Route
           path="/login"
-          element={!authUser? <Login />:<Navigate to="/"/>}
+          element={!authUser ? <Login /> : <Navigate to="/" />}
         />
-        <Route
-          path="/signup"
-          element={<SignUp />}
-        />
+        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/profile"
           element={authUser ? <Profile /> : <Navigate to="/login" />}

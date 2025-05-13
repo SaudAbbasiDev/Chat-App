@@ -26,7 +26,7 @@ export const useAuthStore: any = create<any>((set: any, get: any) => ({
     if (!authUser || get().socket?.connected) return;
 
     console.log("Connecting to socket...");
-    const socket = io("http://localhost:4000", {
+    const socket = io(`${import.meta.env.VITE_DEV_URL}`, {
       query: { userId: authUser._id },
     });
 
