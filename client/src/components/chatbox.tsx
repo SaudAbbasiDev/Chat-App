@@ -1,5 +1,5 @@
 import { useMsgStore } from "./msgstore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Input from "./input";
 import { useAuthStore } from "./authstore";
 
@@ -12,14 +12,18 @@ const ChatArea = () => {
     listenMessage,
     unlistenMessage,
   } = useMsgStore();
-  // let messageRef = useRef<any>(null);
   const { authUser, Onlineusers } = useAuthStore();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     getMessages(selectedUser._id);
     listenMessage();
-    // messageRef.current.scrollIntoView({ behavior: "smooth" });
     return () => unlistenMessage();
   }, [selectedUser._id, getMessages, listenMessage, unlistenMessage]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   console.log({ heeeeeeeh: messages });
   if (isMessageloading) return <h1>Loading...</h1>;
@@ -120,6 +124,9 @@ const ChatArea = () => {
               </div>
             );
           })}
+
+          {/* Scroll to Bottom */}
+          <div ref={messagesEndRef} />
 
           {/* Message Input */}
         </div>

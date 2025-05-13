@@ -11,7 +11,7 @@ const Sidebar = () => {
   }, []);
   return (
     <>
-      <div className="w-[30%] h-[95%] bg-white border-r border-gray-200 p-4 hidden md:block">
+      <div className="w-[20%] h-[95%] bg-white border-r border-gray-200 p-4 hidden md:block">
         <h2 className="text-lg font-semibold mb-4 flex items-center">
           <Users className="mr-2" size={20} />
           Users

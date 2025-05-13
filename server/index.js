@@ -9,16 +9,12 @@ import path from "path";
 import MsgRouter from "./App/routes/messageroutes.js";
 import { io, app, server } from "./App/controllers/socket.js";
 app.use(cookieParser());
-const __dirname = path.resolve();
-app.use(express.json()); // Increase limit
+app.use(express.json({ limit: '10mb' })); // Increase limit to 10MB
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // Increase limit for URL-encoded data
 app.use(cors({ credentials: true, origin:process.env.DEV_URL }));
 app.get("/", (req, res) => {
   res.send("Working Fine");
 });
-// if(process.env.NODE_ENV === "production") app.use(express.static(path.join(__dirname, "../client/dist")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-// })
 app.use("/api/auth", AuthRouter);
 app.use("/api/msg", MsgRouter);
 server.listen(process.env.PORT);
